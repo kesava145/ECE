@@ -1,0 +1,50 @@
+clc;
+clear all;
+close all;
+
+a = 2;
+t = 0:2*pi/50:2*pi;
+x = a * sin(t); % Fixed syntax here
+
+subplot(3,1,1)
+plot(x, 'r');
+xlabel('time(s)');
+ylabel('Amplitude(v)');
+title('Message signal');
+
+delta = 0.2;
+xn = zeros(1, length(x)); % Initialize xn with zeros
+
+% Delta modulation
+for i = 1:length(x)
+    if x(i) > xn(i)
+        d(i) = 1;
+        xn(i + 1) = xn(i) + delta; % Fixed syntax here
+    else
+        d(i) = 0;
+        xn(i + 1) = xn(i) - delta; % Fixed syntax here
+    end
+end
+
+subplot(3,1,2)
+stairs(xn)
+xlabel('time(s)');
+ylabel('Amplitude (v)');
+title('Delta modulated signal');
+
+% Delta demodulation
+xn = zeros(1, length(x)); % Reset xn
+for i = 1:length(d)
+    if d(i) > xn(i)
+        d(i) = 0;
+    else
+        d(i) = 1;
+    end
+    xn(i + 1) = xn(i) + (2 * d(i) - 1) * delta; % Fixed syntax here
+end
+
+subplot(3,1,3)
+plot(xn, 'c');
+xlabel('time(s)');
+ylabel('Amplitude(v)');
+title('Delta demodulated signal');
